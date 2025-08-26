@@ -1,214 +1,371 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎥 BD Video Earnings with Mini App</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+<title>ভিডিও আয় অ্যাপ</title>
 <style>
-@keyframes pulse {0%{transform:scale(1);}50%{transform:scale(1.03);}100%{transform:scale(1);}}
-body {font-family:'Open Sans', sans-serif; background:linear-gradient(135deg,#56CCF2,#2F80ED); margin:0; padding:0; display:flex; justify-content:center; align-items:center; min-height:100vh;}
-.container {background:#fff; padding:30px; border-radius:25px; box-shadow:0 12px 35px rgba(0,0,0,0.3); width:95%; max-width:480px; text-align:center; transition:transform 0.3s;}
-.container:hover {transform:translateY(-5px);}
-h2 {font-family:'Montserrat', sans-serif; color:#333; margin-bottom:20px;}
-input {width:90%; padding:12px; margin:10px 0; border-radius:12px; border:1px solid #ccc; font-size:16px; transition:border 0.3s;}
-input:focus {border-color:#2F80ED; outline:none;}
-button {margin:10px 5px; padding:12px 20px; border:none; border-radius:15px; font-size:16px; color:#fff; cursor:pointer; transition:0.3s; display:inline-flex; align-items:center; justify-content:center;}
-button:hover {opacity:0.85; transform:scale(1.05);}
-#loginBtn {background:linear-gradient(45deg,#56CCF2,#2F80ED);}
-#registerBtn {background:linear-gradient(45deg,#F2994A,#F2C94C);}
-.watchBtn {background:linear-gradient(45deg,#EB5757,#FF6B6B); font-weight:bold; animation:none;}
-#shareBtn {background:linear-gradient(45deg,#F2994A,#F2C94C);}
-#cashoutBtn {background:linear-gradient(45deg,#27AE60,#2ECC71);}
-#logoutBtn {background:linear-gradient(45deg,#EB5757,#E74C3C);}
-#openMiniApp {background:linear-gradient(45deg,#9B51E0,#BB6BD9);}
-#backToMain {background:linear-gradient(45deg,#2D9CDB,#56CCF2);}
-button:disabled {background:#ccc; cursor:not-allowed; transform:none;}
-.balance {font-size:26px; font-weight:bold; color:#2F80ED; margin:15px 0; transition:all 0.5s ease;}
-#videoMsg, #loginMsg, #refMsg {font-size:16px; margin:10px 0; color:#555;}
-#loginMsg {color:red; font-weight:bold;}
-.video-list {text-align:left; margin:15px 0;}
-.video-item {background:#f1f1f1; padding:12px; border-radius:12px; margin:8px 0; display:flex; justify-content:space-between; align-items:center;}
-.share-icons {display:flex; justify-content:center; margin-top:10px;}
-.share-icons button {margin:0 5px; padding:10px 15px; border-radius:12px; font-size:14px;}
-#adModal {display:none; position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);justify-content:center;align-items:center; z-index:1000;}
-#adModal .modal-content {background:#fff;padding:20px;border-radius:15px;max-width:400px;width:90%; text-align:center;}
-@media(max-width:500px){.container{padding:25px;} input,button{font-size:14px;}}
+body { font-family: Arial, sans-serif; background: #eef2f7; margin:0; padding:0; }
+header { background: #4e73df; color: #fff; padding: 20px; text-align: center; font-size: 1.5em; font-weight: bold; }
+.container { padding: 20px; max-width: 500px; margin: auto; }
+input { width:100%; padding:12px; margin:8px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; }
+button { width:100%; padding:12px; margin:10px 0; border:none; border-radius:8px; background:#1cc88a; color:#fff; font-size:1em; cursor:pointer; transition:0.3s; }
+button:hover { background:#17a673; }
+button:disabled { background:#ccc; cursor:not-allowed; }
+.balance { background:#fff; padding:15px; border-radius:10px; margin:10px 0; text-align:center; box-shadow:0 4px 6px rgba(0,0,0,0.1); }
+.video-card { background:#fff; padding:15px; border-radius:12px; margin:10px 0; box-shadow:0 4px 6px rgba(0,0,0,0.1); }
+.video-card button { width:auto; padding:8px 16px; margin-top:8px; }
+.ad-container { margin-top:10px; text-align:center; min-height: 250px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border-radius: 8px; }
+.ad-placeholder { color: #888; }
+h3 { margin-bottom:10px; color:#333; }
+.section { margin-top:20px; }
+.loading { color: #4e73df; font-weight: bold; text-align: center; padding: 10px; }
+.countdown { font-weight: bold; color: #4e73df; margin-top: 5px; }
+.logout-btn { background: #e74a3b; margin-top: 20px; }
+.logout-btn:hover { background: #c13526; }
 </style>
 </head>
 <body>
 
-<!-- Login/Register -->
-<div class="container" id="loginDiv">
-<h2>🔑 Login / Register</h2>
-<input type="email" id="email" placeholder="Email" required><br>
-<input type="password" id="password" placeholder="Password" required><br>
-<button id="loginBtn">Login</button>
-<button id="registerBtn">Register</button>
-<p id="loginMsg"></p>
+<header>ভিডিও আয় অ্যাপ</header>
+
+<div class="container">
+<div id="loginDiv">
+<h3>লগিন করুন</h3>
+<input type="email" id="email" placeholder="ইমেল লিখুন">
+<input type="password" id="password" placeholder="পাসওয়ার্ড লিখুন">
+<button id="loginBtn">লগিন</button>
 </div>
 
-<!-- Main App -->
-<div class="container" id="appDiv" style="display:none;">
-<h2>🎥 BD Video Earnings</h2>
-<p class="balance">💰 Balance: <span id="balance">0</span> ৳</p>
-
-<div class="video-list" id="videoList">
-  <div class="video-item">Video 1 <button class="watchBtn" data-index="0">Watch</button></div>
-  <div class="video-item">Video 2 <button class="watchBtn" data-index="1">Watch</button></div>
-  <div class="video-item">Video 3 <button class="watchBtn" data-index="2">Watch</button></div>
-  <div class="video-item">Video 4 <button class="watchBtn" data-index="3">Watch</button></div>
-</div>
-<p id="videoMsg"></p>
-
-<button id="shareBtn">🎁 Copy / Share Referral Link</button>
-<p id="refMsg"></p>
-
-<div class="share-icons">
-<button onclick="shareLink('whatsapp')">WhatsApp</button>
-<button onclick="shareLink('messenger')">Messenger</button>
-<button onclick="shareLink('facebook')">Facebook</button>
+<div id="appDiv" style="display:none;">
+<div class="balance">
+<h4>স্বাগতম, <span id="userEmail"></span></h4>
+<h3>তোমার ব্যালান্স: ৳<span id="balance">0</span></h3>
+<button id="logoutBtn" class="logout-btn">লগআউট</button>
 </div>
 
-<button id="cashoutBtn">💸 Cashout (Bkash/Nagad/Rocket)</button><br>
-<button id="logoutBtn">🚪 Logout</button><br>
-<button id="openMiniApp">🛠 Open Mini App</button>
+<div class="section">
+<h3>ভিডিও দেখুন এবং আয় করুন</h3>
+<div id="videos"></div>
 </div>
 
-<!-- Mini App -->
-<div class="container" id="miniAppDiv" style="display:none;">
-<h2>📱 Mini App</h2>
-<p>এখানে তোমার সাব-অ্যাপের ফিচার আসবে।</p>
-<button id="backToMain">🔙 Back to Main App</button>
+<div class="section">
+<h3>রেফারাল লিঙ্ক দিয়ে আয় করো (৫০ টাকা)</h3>
+<input type="text" id="referLinkInput" readonly>
+<button id="copyBtn">লিংক কপি করো</button>
 </div>
 
-<!-- Ad Modal -->
-<div id="adModal">
-  <div class="modal-content">
-    <div id="adContainer"></div>
-    <button id="closeAd">Close Ad</button>
-  </div>
+<div class="section">
+<h3>উইথড্রাল (বিকাশ/নগদ)</h3>
+<input type="text" id="bkashNumber" placeholder="বিকাশ/নগদ নম্বর">
+<input type="number" id="withdrawAmount" placeholder="টাকার পরিমাণ">
+<button id="withdrawBtn">উইথড্র</button>
+</div>
+</div>
 </div>
 
 <script>
-// Users Data
-let users = JSON.parse(localStorage.getItem("users") || "{}");
-let currentUser = localStorage.getItem("currentUser");
-
-function saveUsers(){ localStorage.setItem("users", JSON.stringify(users)); }
-function showApp(){ document.getElementById("loginDiv").style.display="none"; document.getElementById("appDiv").style.display="block"; loadBalance(); }
-function loadBalance(){ let user=users[currentUser]; document.getElementById("balance").innerText=user.balance; }
-
-// Register
-document.getElementById("registerBtn").addEventListener("click",()=>{
-let email=document.getElementById("email").value.trim();
-let password=document.getElementById("password").value.trim();
-if(!email||!password){ alert("Fill all fields"); return; }
-if(users[email]){ document.getElementById("loginMsg").innerText="Email already exists, login instead."; return; }
-let refCode=email.replace(/[@.]/g,''); 
-users[email]={password:password, balance:0, lastWatch:[], refCode:refCode};
-saveUsers();
-currentUser=email; localStorage.setItem("currentUser",currentUser);
-showApp();
-});
-
-// Login
-document.getElementById("loginBtn").addEventListener("click",()=>{
-let email=document.getElementById("email").value.trim();
-let password=document.getElementById("password").value.trim();
-if(users[email] && users[email].password===password){
-currentUser=email; localStorage.setItem("currentUser",currentUser); showApp();
-}else{ document.getElementById("loginMsg").innerText="Incorrect email or password."; }
-});
-
-// Logout
-document.getElementById("logoutBtn").addEventListener("click",()=>{
-localStorage.removeItem("currentUser"); currentUser=null;
-document.getElementById("loginDiv").style.display="block";
-document.getElementById("appDiv").style.display="none";
-});
-
-// Video Ads Scripts
-let adScripts = [
-  "//pl27496709.profitableratecpm.com/5d/d3/fb/5dd3fb19ff46ec13df9cbce0dc5e1b7b.js",
-  "https://www.profitableratecpm.com/fseywmgr?key=2c425623f1ac9a75a48c4804dea0c855",
-  "//pl27501001.profitableratecpm.com/b6/15/aa/b615aa44044fcfb95655fd07a5eebf6c.js",
-  "//www.highperformanceformat.com/590e8d0a7a1712fe1cf2bca322cc5f6/invoke.js"
-];
-let videoRewards = [5,10,15,20];
-
-// Load ad dynamically
-function loadAd(index){
-  let container = document.getElementById("adContainer");
-  container.innerHTML = "";
-  let script = document.createElement("script");
-  script.src = adScripts[index];
-  script.async = true;
-  container.appendChild(script);
-  document.getElementById("adModal").style.display="flex";
-
-  document.getElementById("closeAd").onclick = function(){
-    document.getElementById("adModal").style.display="none";
-    alert(`🎉 Video ${index+1} complete! +${videoRewards[index]} টাকা যোগ হলো`);
-    users[currentUser].balance += videoRewards[index];
-    loadBalance();
-    saveUsers();
-  };
-}
-
-// Video buttons
-document.querySelectorAll(".watchBtn").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    let index = parseInt(btn.getAttribute("data-index"));
-    loadAd(index);
-  });
-});
-
-// Referral
-document.getElementById("shareBtn").addEventListener("click",()=>{
-  let user = users[currentUser];
-  let link = `${window.location.href.split('?')[0]}?ref=${user.refCode}`;
-  navigator.clipboard.writeText(link).then(()=>{ document.getElementById("refMsg").innerHTML=`✅ Link copied: <a href="${link}" target="_blank">${link}</a>`; });
-});
-function shareLink(platform){
-  let user = users[currentUser];
-  let link = `${window.location.href.split('?')[0]}?ref=${user.refCode}`;
-  let url="";
-  if(platform==="whatsapp") url=`https://wa.me/?text=Join+and+earn+BDT videos: ${encodeURIComponent(link)}`;
-  if(platform==="messenger") url=`https://www.facebook.com/dialog/send?link=${encodeURIComponent(link)}&app_id=1234567890&redirect_uri=${encodeURIComponent(link)}`;
-  if(platform==="facebook") url=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`;
-  window.open(url,"_blank");
-}
-
-// Cashout
-document.getElementById("cashoutBtn").addEventListener("click",()=>{
-  let user=users[currentUser];
-  if(user.balance<=0){ alert("❌ Balance empty! Watch videos or refer first."); return; }
-  let mobile=prompt("Enter Bkash/Nagad/Rocket number:");
-  if(mobile){ alert(`✅ Success! ${user.balance} ৳ sent to ${mobile}.`); user.balance=0; loadBalance(); saveUsers();}
-});
-
-// Referral from URL
-window.addEventListener('load',()=>{
-  const params=new URLSearchParams(window.location.search);
-  if(params.has('ref')){
-    let ref=params.get('ref');
-    for(let u in users){
-      if(users[u].refCode===ref && u!==currentUser){ users[u].balance+=40; saveUsers(); break; }
+(function() {
+    // User management
+    let user = null;
+    let userId = localStorage.getItem('userId');
+    let referBonus = 50;
+    
+    // Generate user ID if not exists
+    if (!userId) {
+        userId = Math.floor(Math.random() * 1000000).toString();
+        localStorage.setItem('userId', userId);
     }
-  }
-  if(currentUser && users[currentUser]) showApp();
-});
+    
+    // Videos data
+    let videos = [
+        {title:"ভিডিও ১", amount:5, ad:"//www.highperformanceformat.com/a6ea0679ab0ceed3e80f152aa2ffd7c5/invoke.js"},
+        {title:"ভিডিও ২", amount:10, ad:"//www.highperformanceformat.com/6e98d8794b32fbb47a974e5eab3b78db/invoke.js"},
+        {title:"ভিডিও ৩", amount:15, ad:"//pl27496709.profitableratecpm.com/5d/d3/fb/5dd3fb19ff46ec13df9cbce0dc5e1b7b.js"},
+        {title:"ভিডিও ৪", amount:20, ad:"https://www.profitableratecpm.com/fseywmgr?key=2c425623f1ac9a75a48c4804dea0c855"},
+        {title:"ভিডিও ৫", amount:25, ad:"//pl27501001.profitableratecpm.com/b6/15/aa/b615aa44044fcfb95655fd07a5eebf6c.js"},
+        {title:"ভিডিও ৬", amount:30, ad:"//pl27498721.profitableratecpm.com/ab041e98f93fc038707138173299fe06/invoke.js"}
+    ];
 
-// Mini App Navigation
-document.getElementById("openMiniApp").addEventListener("click",()=>{
-  document.getElementById("appDiv").style.display="none";
-  document.getElementById("miniAppDiv").style.display="block";
-});
-document.getElementById("backToMain").addEventListener("click",()=>{
-  document.getElementById("miniAppDiv").style.display="none";
-  document.getElementById("appDiv").style.display="block";
-});
+    // Initialize the app
+    function initApp() {
+        // Check if user was previously logged in
+        const savedUser = localStorage.getItem('user_' + userId);
+        if (savedUser) {
+            try {
+                user = JSON.parse(savedUser);
+                showApp();
+            } catch (e) {
+                console.error("Error parsing user data:", e);
+                user = null;
+            }
+        }
+        
+        // Set up event listeners
+        document.getElementById('loginBtn').addEventListener('click', login);
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        document.getElementById('copyBtn').addEventListener('click', copyReferralLink);
+        document.getElementById('withdrawBtn').addEventListener('click', withdraw);
+        
+        // Set up referral system
+        setupReferral();
+    }
+
+    // Login function
+    function login() {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        
+        if (!email || !password) {
+            alert("সব ফিল্ড পূরণ করুন।");
+            return;
+        }
+        
+        // Simple email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert("বৈধ ইমেল ঠিকানা লিখুন।");
+            return;
+        }
+        
+        // Check if user exists or create new
+        const userKey = 'user_' + userId;
+        const savedUser = localStorage.getItem(userKey);
+        
+        if (savedUser) {
+            user = JSON.parse(savedUser);
+        } else {
+            user = {
+                email: email,
+                balance: 0,
+                watchedVideos: {},
+                bkashNumber: "",
+                joinDate: new Date().toISOString()
+            };
+            localStorage.setItem(userKey, JSON.stringify(user));
+        }
+        
+        showApp();
+    }
+
+    // Show the main app interface
+    function showApp() {
+        document.getElementById('loginDiv').style.display = 'none';
+        document.getElementById('appDiv').style.display = 'block';
+        document.getElementById('userEmail').innerText = user.email;
+        updateBalance();
+        loadVideos();
+        
+        // Pre-fill bkash number if available
+        if (user.bkashNumber) {
+            document.getElementById('bkashNumber').value = user.bkashNumber;
+        }
+    }
+
+    // Logout function
+    function logout() {
+        user = null;
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+        document.getElementById('loginDiv').style.display = 'block';
+        document.getElementById('appDiv').style.display = 'none';
+    }
+
+    // Update balance display
+    function updateBalance() {
+        document.getElementById('balance').innerText = user.balance;
+        localStorage.setItem('user_' + userId, JSON.stringify(user));
+    }
+
+    // Load ad into container
+    function loadAd(adSrc, containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = "<div class='ad-placeholder'>বিজ্ঞাপন লোড হচ্ছে...</div>";
+        
+        // Create a timeout for ad loading
+        const loadTimeout = setTimeout(() => {
+            container.innerHTML = "<div class='ad-placeholder'>বিজ্ঞাপন লোড হয়নি। পরে আবার চেষ্টা করুন।</div>";
+        }, 10000);
+        
+        // Load the ad script
+        const script = document.createElement('script');
+        script.src = adSrc;
+        script.async = true;
+        script.onload = function() {
+            clearTimeout(loadTimeout);
+        };
+        script.onerror = function() {
+            clearTimeout(loadTimeout);
+            container.innerHTML = "<div class='ad-placeholder'>বিজ্ঞাপন লোড হয়নি। পরে আবার চেষ্টা করুন।</div>";
+        };
+        
+        container.appendChild(script);
+    }
+
+    // Load videos
+    function loadVideos() {
+        const videoDiv = document.getElementById('videos');
+        videoDiv.innerHTML = '';
+        const today = new Date().toISOString().slice(0, 10);
+
+        videos.forEach((v, index) => {
+            const watchedDate = user.watchedVideos ? user.watchedVideos[index] : null;
+            const watchedToday = watchedDate === today;
+
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.innerHTML = `
+                <strong>${v.title}</strong> - ৳${v.amount} <br>
+                <button id="btn${index}" ${watchedToday ? 'disabled' : ''}>
+                    ${watchedToday ? 'আজ দেখা হয়েছে' : 'ভিডিও দেখুন'}
+                </button>
+                <div class="ad-container" id="ad${index}"></div>
+                ${watchedToday ? '' : '<div id="countdown' + index + '" class="countdown"></div>'}
+            `;
+            
+            videoDiv.appendChild(card);
+            
+            if (!watchedToday) {
+                document.getElementById(`btn${index}`).addEventListener('click', () => watchVideo(index));
+            }
+            
+            loadAd(v.ad, `ad${index}`);
+        });
+    }
+
+    // Watch video function
+    function watchVideo(index) {
+        const today = new Date().toISOString().slice(0, 10);
+        const button = document.getElementById(`btn${index}`);
+        const countdownEl = document.getElementById(`countdown${index}`);
+        
+        // Disable button during countdown
+        button.disabled = true;
+        
+        // 30-second countdown
+        let secondsLeft = 30;
+        countdownEl.textContent = `প্রয়োজনীয় সময়: ${secondsLeft} সেকেন্ড`;
+        
+        const countdownInterval = setInterval(() => {
+            secondsLeft--;
+            countdownEl.textContent = `প্রয়োজনীয় সময়: ${secondsLeft} সেকেন্ড`;
+            
+            if (secondsLeft <= 0) {
+                clearInterval(countdownInterval);
+                
+                // Add reward to balance
+                user.balance += videos[index].amount;
+                
+                // Mark as watched today
+                if (!user.watchedVideos) user.watchedVideos = {};
+                user.watchedVideos[index] = today;
+                
+                // Update UI and storage
+                updateBalance();
+                button.textContent = 'আজ দেখা হয়েছে';
+                countdownEl.textContent = '';
+                localStorage.setItem('user_' + userId, JSON.stringify(user));
+                
+                alert(`ভিডিও দেখার জন্য আপনি ${videos[index].amount} টাকা অর্জন করেছেন!`);
+            }
+        }, 1000);
+    }
+
+    // Set up referral system
+    function setupReferral() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const refCode = urlParams.get('ref');
+        
+        // Check if this is a referral and it's not self-referral
+        if (refCode && refCode !== userId) {
+            // Check if this referral has already been processed
+            const referralKey = `referral_${userId}_${refCode}`;
+            if (!localStorage.getItem(referralKey)) {
+                // Get referrer's data
+                const refUserKey = 'user_' + refCode;
+                const refUserData = localStorage.getItem(refUserKey);
+                
+                if (refUserData) {
+                    try {
+                        const refUser = JSON.parse(refUserData);
+                        refUser.balance += referBonus;
+                        localStorage.setItem(refUserKey, JSON.stringify(refUser));
+                        localStorage.setItem(referralKey, 'processed');
+                        
+                        alert("রেফারাল বোনাস যোগ করা হয়েছে!");
+                    } catch (e) {
+                        console.error("Error processing referral:", e);
+                    }
+                }
+            }
+        }
+        
+        // Set referral link
+        document.getElementById("referLinkInput").value = 
+            window.location.origin + window.location.pathname + "?ref=" + userId;
+    }
+
+    // Copy referral link
+    function copyReferralLink() {
+        const input = document.getElementById("referLinkInput");
+        input.select();
+        input.setSelectionRange(0, 99999);
+        
+        try {
+            const successful = document.execCommand("copy");
+            if (successful) {
+                alert("রেফারাল লিঙ্ক কপি হয়েছে!");
+            } else {
+                alert("লিঙ্ক কপি করতে সমস্যা হয়েছে। ম্যানুয়ালি কপি করুন।");
+            }
+        } catch (err) {
+            alert("লিঙ্ক কপি করতে সমস্যা হয়েছে। ম্যানুয়ালি কপি করুন।");
+        }
+    }
+
+    // Withdraw function
+    function withdraw() {
+        const number = document.getElementById('bkashNumber').value.trim();
+        const amount = parseInt(document.getElementById('withdrawAmount').value);
+        
+        // Validate inputs
+        if (!number || isNaN(amount)) {
+            alert("বিকাশ/নগদ নম্বর এবং টাকার পরিমাণ সঠিকভাবে লিখুন।");
+            return;
+        }
+        
+        if (amount <= 0) {
+            alert("টাকার পরিমাণ ০ এর বেশি হতে হবে।");
+            return;
+        }
+        
+        if (amount > user.balance) {
+            alert("আপনার ব্যালান্স পর্যাপ্ত নয়।");
+            return;
+        }
+        
+        // Validate bKash/nagad number (simple validation)
+        if (!/^(?:\+88|01)?\d{11}$/.test(number)) {
+            alert("বিকাশ/নগদ নম্বরটি সঠিক নয়।");
+            return;
+        }
+        
+        // Process withdrawal
+        user.balance -= amount;
+        user.bkashNumber = number;
+        localStorage.setItem('user_' + userId, JSON.stringify(user));
+        updateBalance();
+        
+        alert(`৳${amount} টাকা ${number} নম্বরে পাঠানোর জন্য অনুরোধ করা হয়েছে। ২৪-৪৮ ঘন্টার মধ্যে টাকা পেয়ে যাবেন।`);
+        
+        // Clear the amount field
+        document.getElementById('withdrawAmount').value = '';
+    }
+
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initApp);
+})();
 </script>
+
 </body>
 </html>
